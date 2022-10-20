@@ -20,16 +20,15 @@ namespace Tema3_PixelArt
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Brush color = Brushes.White;
         public MainWindow()
         {
             InitializeComponent();
-            //smallButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
-
         }
 
         private void resizePanel(object sender, RoutedEventArgs e)
         {
-            Button b = (Button) sender;
+            Button b = (Button)sender;
             int size = int.Parse(b.Tag.ToString());
             if (MessageBox.Show("¿Seguro que quieres perder tu dibujo?",
                 "Nuevo dibujo",
@@ -42,14 +41,62 @@ namespace Tema3_PixelArt
                     for (int j = 0; j < size; j++)
                     {
                         Border bd = new Border();
-
-                        bd.Margin = new Thickness(0);
-                        bd.BorderBrush = Brushes.Gray;
-                        bd.BorderThickness = new Thickness(0.5);
+                        bd.Style = (Style)this.Resources["borderPixelArt"];
                         pixelPanelGrid.Children.Add(bd);
                     }
                 }
             }
         }
+
+        private void radioButtonColor_Checked(object sender, RoutedEventArgs e)
+        {
+            RadioButton rb = (RadioButton)sender;
+            if (rb.Tag.ToString() == "Personalizado") colorPersonalizadoTextBox.IsEnabled = true;
+            else cambioColor(rb.Tag.ToString(), false);
+        }
+        private void personalizadoRadioButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+            colorPersonalizadoTextBox.IsEnabled = false;
+            personalizadoRadioButton.Foreground = Brushes.Black;
+        }
+        private void colorPersonalizadoTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) cambioColor(((TextBox)sender).Text, true);
+        }
+        private void cambioColor(String colorNuevo, bool isPersonalized)
+        {
+            BrushConverter bc = new BrushConverter();
+            try
+            {
+                color = (Brush)bc.ConvertFrom(colorNuevo);
+                if (isPersonalized) personalizadoRadioButton.Foreground = (Brush)bc.ConvertFrom(colorNuevo);
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show($"Color {colorNuevo} no válido.","Error",MessageBoxButton.OK,MessageBoxImage.Error);
+            }
+        }
+        private void bordeBorder_PreviewMouseLeftButtonDown(object sender, RoutedEventArgs e)
+        {
+            Border bo = (Border)sender;
+            bo.Background = color;
+        }
+
+        private void bordeBorder_MouseEnter(object sender, RoutedEventArgs e)
+        {
+            Border b = (Border)sender;
+            if (System.Windows.Input.Mouse.LeftButton == MouseButtonState.Pressed)
+                    b.Background = color;
+        }
+
+        private void rellenarButton_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (Object o in pixelPanelGrid.Children)
+            {
+                ((Border)o).Background = color;
+            }
+        }
+
+    
     }
 }

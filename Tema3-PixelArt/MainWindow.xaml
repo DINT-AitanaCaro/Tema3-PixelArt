@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Tema3_PixelArt"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" MinHeight="500" MinWidth="800">
+        Title="Pixel Art" Height="560" Width="800" MinHeight="560" MinWidth="800">
     <Window.Resources>
         <Style TargetType="{x:Type Button}">
             <Setter Property="Margin" Value="5"/>
@@ -13,7 +13,15 @@
             <Setter Property="Background" Value="White"/>
         </Style>
         <Style TargetType="{x:Type RadioButton}">
+            <EventSetter Event="Checked" Handler="radioButtonColor_Checked"/>
             <Setter Property="Margin" Value="3"/>
+        </Style>
+        <Style TargetType="{x:Type Border}" x:Key="borderPixelArt">
+            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="bordeBorder_PreviewMouseLeftButtonDown"/>
+            <EventSetter Event="MouseEnter" Handler="bordeBorder_MouseEnter"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+            <Setter Property="BorderThickness" Value="0.5"/>
         </Style>
     </Window.Resources>
     <Grid>
@@ -21,10 +29,12 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="120"></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="4"></ColumnDefinition>
+            <ColumnDefinition Width="116"/>
+            <ColumnDefinition Width="51*"></ColumnDefinition>
+            <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel  Grid.Row="0" Grid.Column="0">
+        <StackPanel  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
             <GroupBox Margin="5" Header="Nuevo" >
                 <StackPanel>
                     <Button x:Name="smallButton" Tag="5" Click="resizePanel">Pequeño</Button>
@@ -34,22 +44,24 @@
             </GroupBox>
             <GroupBox Margin="5" Header="Color" >
                 <StackPanel>
-                    <RadioButton IsChecked="True">Blanco</RadioButton>
-                    <RadioButton>Negro</RadioButton>
-                    <RadioButton>Rojo</RadioButton>
-                    <RadioButton>Verde</RadioButton>
-                    <RadioButton>Azul</RadioButton>
-                    <RadioButton>Amarillo</RadioButton>
-                    <RadioButton>Naranja</RadioButton>
-                    <RadioButton>Rosa</RadioButton>
-                    <RadioButton>Personalizado</RadioButton>
-                    <TextBox IsEnabled="False" Margin="20,5,5,5"/>
+                    <RadioButton Tag="#FFFFFF" IsChecked="True">Blanco</RadioButton>
+                    <RadioButton Tag="#000000">Negro</RadioButton>
+                    <RadioButton Tag="#FF2D00">Rojo</RadioButton>
+                    <RadioButton Tag="#26D037">Verde</RadioButton>
+                    <RadioButton Tag="#38C6FF">Azul</RadioButton>
+                    <RadioButton Tag="#FBFF38">Amarillo</RadioButton>
+                    <RadioButton Tag="#FD6620">Naranja</RadioButton>
+                    <RadioButton Tag="#FF94E5">Rosa</RadioButton>
+                    <RadioButton Tag="Personalizado" x:Name="personalizadoRadioButton" Unchecked="personalizadoRadioButton_Unchecked">Personalizado</RadioButton>
+                    <TextBox Tag="Personalizado" x:Name="colorPersonalizadoTextBox" IsEnabled="False" Margin="20,5,5,5" KeyDown="colorPersonalizadoTextBox_KeyDown"/>
                 </StackPanel>
             </GroupBox>
+            <Button Click="rellenarButton_Click">Rellenar</Button>
         </StackPanel>
-        <UniformGrid x:Name="pixelPanelGrid" Grid.Row="0" Grid.Column="1" Margin="15">
+
+        <UniformGrid x:Name="pixelPanelGrid" Grid.Row="0" Grid.Column="2" Margin="15" Grid.ColumnSpan="2">
 
         </UniformGrid>
-        
+
     </Grid>
 </Window>
