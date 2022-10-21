@@ -5,44 +5,62 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Tema3_PixelArt"
         mc:Ignorable="d"
-        Title="Pixel Art" Height="560" Width="800" MinHeight="560" MinWidth="800">
+        Icon="assets/icon.ico" Title="Pixel Art" Height="560" Width="800" MinHeight="560" MinWidth="800">
     <Window.Resources>
         <Style TargetType="{x:Type Button}">
             <Setter Property="Margin" Value="5"/>
             <Setter Property="Padding" Value="3"/>
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="Background" Value="#FEF1E6"/>
+            <Setter Property="Foreground" Value="#521808"/>
+            <Setter Property="BorderThickness" Value="0.75"/>
+            <Setter Property="BorderBrush" Value="#521808"/>
+            <Setter Property="FontWeight" Value="DemiBold"/>
         </Style>
         <Style TargetType="{x:Type RadioButton}">
             <EventSetter Event="Checked" Handler="radioButtonColor_Checked"/>
             <Setter Property="Margin" Value="3"/>
         </Style>
         <Style TargetType="{x:Type Border}" x:Key="borderPixelArt">
-            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="bordeBorder_PreviewMouseLeftButtonDown"/>
+            <EventSetter Event="MouseLeftButtonDown" Handler="bordeBorder_MouseLeftButtonDown"/>
             <EventSetter Event="MouseEnter" Handler="bordeBorder_MouseEnter"/>
             <Setter Property="Margin" Value="0"/>
+            <Setter Property="Background" Value="White"/>
             <Setter Property="BorderBrush" Value="Gray"/>
             <Setter Property="BorderThickness" Value="0.5"/>
         </Style>
+        <Style TargetType="{x:Type GroupBox}">
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="BorderBrush" Value="#813919"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+        </Style>
     </Window.Resources>
-    <Grid>
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="4"></ColumnDefinition>
-            <ColumnDefinition Width="116"/>
-            <ColumnDefinition Width="51*"></ColumnDefinition>
-            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="170"/>
+            <ColumnDefinition Width="285*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-            <GroupBox Margin="5" Header="Nuevo" >
+        <StackPanel  Grid.Row="0" Grid.Column="0" Margin="10">
+            <GroupBox Header="Tamaño panel">
                 <StackPanel>
                     <Button x:Name="smallButton" Tag="5" Click="resizePanel">Pequeño</Button>
                     <Button x:Name="mediumButton" Tag="15" Click="resizePanel">Mediano</Button>
                     <Button x:Name="bigButton" Tag="25" Click="resizePanel">Grande</Button>
+                    <TextBlock Margin="5,0,5,5" FontSize="13">Personalizado</TextBlock>
+                    <TextBox x:Name="panelPersonalizadoTextBox" Margin="15,0,10,0" KeyDown="panelPersonalizadoTextBox_KeyDown" Height="20" VerticalContentAlignment="Center" FontSize="12" Text="ej. 60" Foreground="LightGray" GotFocus="panelPersonalizadoTextBox_GotFocus" LostFocus="panelPersonalizadoTextBox_LostFocus">
+                        <TextBox.ToolTip>
+                            <ToolTip>
+                                <TextBlock><Run Text="Número entero positivo"/></TextBlock>
+                            </ToolTip>
+                        </TextBox.ToolTip>
+                    </TextBox>
+                    <TextBlock x:Name="errorNumero" Foreground="Red" Margin="15,0,5,5" Visibility="Collapsed">Introduce un número<LineBreak/>entre 1 y 100.</TextBlock>
+
                 </StackPanel>
             </GroupBox>
-            <GroupBox Margin="5" Header="Color" >
+            <GroupBox  Header="Color">
                 <StackPanel>
                     <RadioButton Tag="#FFFFFF" IsChecked="True">Blanco</RadioButton>
                     <RadioButton Tag="#000000">Negro</RadioButton>
@@ -58,10 +76,10 @@
             </GroupBox>
             <Button Click="rellenarButton_Click">Rellenar</Button>
         </StackPanel>
+        <Border x:Name="pixelPanelGridBorder" Grid.Row="0" Grid.Column="1" Padding="0" Margin="20">
+            <UniformGrid x:Name="pixelPanelGrid" Margin="15" Grid.ColumnSpan="2">
 
-        <UniformGrid x:Name="pixelPanelGrid" Grid.Row="0" Grid.Column="2" Margin="15" Grid.ColumnSpan="2">
-
-        </UniformGrid>
-
+            </UniformGrid>
+        </Border>
     </Grid>
 </Window>

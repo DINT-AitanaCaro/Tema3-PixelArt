@@ -21,30 +21,56 @@ namespace Tema3_PixelArt
     public partial class MainWindow : Window
     {
         private Brush color = Brushes.White;
+        private bool isFirstTime = true;
         public MainWindow()
         {
             InitializeComponent();
         }
 
+        private void createPanel(int size)
+        {
+            pixelPanelGrid.Children.Clear();
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    Border bd = new Border();
+                    bd.Style = (Style)this.Resources["borderPixelArt"];
+                    pixelPanelGridBorder.BorderThickness = new Thickness(2.5);
+                    pixelPanelGridBorder.BorderBrush = Brushes.Black;
+                    pixelPanelGrid.Margin = new Thickness(0);
+                    pixelPanelGrid.Children.Add(bd);
+                }
+            }
+        }
+
+        private bool isPanelEmpty()
+        {
+            bool isEmpty = true;
+            foreach (var o in pixelPanelGrid.Children)
+            {
+                if (((Border)o).Background != Brushes.White) isEmpty = false;
+            }
+            return isEmpty;
+        }
         private void resizePanel(object sender, RoutedEventArgs e)
         {
             Button b = (Button)sender;
             int size = int.Parse(b.Tag.ToString());
-            if (MessageBox.Show("¿Seguro que quieres perder tu dibujo?",
-                "Nuevo dibujo",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question) == MessageBoxResult.Yes)
+            if (!isFirstTime && !isPanelEmpty())
             {
-                pixelPanelGrid.Children.Clear();
-                for (int i = 0; i < size; i++)
+                if (MessageBox.Show("¿Seguro que quieres perder tu dibujo?",
+                    "Nuevo dibujo",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
-                    for (int j = 0; j < size; j++)
-                    {
-                        Border bd = new Border();
-                        bd.Style = (Style)this.Resources["borderPixelArt"];
-                        pixelPanelGrid.Children.Add(bd);
-                    }
+                    createPanel(size);
                 }
+            }
+            else
+            {
+                createPanel(size);
+                isFirstTime = false;
             }
         }
 
@@ -73,20 +99,19 @@ namespace Tema3_PixelArt
             }
             catch (FormatException)
             {
-                MessageBox.Show($"Color {colorNuevo} no válido.","Error",MessageBoxButton.OK,MessageBoxImage.Error);
+                MessageBox.Show($"Código de color {colorNuevo} no válido.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        private void bordeBorder_PreviewMouseLeftButtonDown(object sender, RoutedEventArgs e)
+        private void bordeBorder_MouseLeftButtonDown(object sender, RoutedEventArgs e)
         {
-            Border bo = (Border)sender;
-            bo.Background = color;
+            ((Border)sender).Background = color;
         }
 
         private void bordeBorder_MouseEnter(object sender, RoutedEventArgs e)
         {
             Border b = (Border)sender;
             if (System.Windows.Input.Mouse.LeftButton == MouseButtonState.Pressed)
-                    b.Background = color;
+                b.Background = color;
         }
 
         private void rellenarButton_Click(object sender, RoutedEventArgs e)
@@ -97,6 +122,41 @@ namespace Tema3_PixelArt
             }
         }
 
-    
+        private void panelPersonalizadoTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                try
+                {
+                    int size = int.Parse(panelPersonalizadoTextBox.Text);
+                    if ((size < 1 || size > 100) && errorNumero.Visibility == Visibility.Collapsed)
+                    {
+                        errorNumero.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        errorNumero.Visibility = Visibility.Collapsed;
+                        createPanel(int.Parse(panelPersonalizadoTextBox.Text));
+                    }
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show($"Número '{panelPersonalizadoTextBox.Text}' no válido.\n Introduce un número entero.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void panelPersonalizadoTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            panelPersonalizadoTextBox.Foreground = Brushes.Black;
+            panelPersonalizadoTextBox.Text = "";
+        }
+
+        private void panelPersonalizadoTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            panelPersonalizadoTextBox.Foreground = Brushes.LightGray;
+            if (String.IsNullOrEmpty(panelPersonalizadoTextBox.Text))
+                panelPersonalizadoTextBox.Text = "ej. 60";
+        }
     }
 }
