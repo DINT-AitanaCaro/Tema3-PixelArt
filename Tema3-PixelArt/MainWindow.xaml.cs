@@ -36,7 +36,7 @@ namespace Tema3_PixelArt
                 {
                     Border bd = new Border();
                     bd.Style = (Style)this.Resources["borderPixelArt"];
-                    pixelPanelGridBorder.BorderThickness = new Thickness(2.5);
+                    pixelPanelGridBorder.BorderThickness = new Thickness(3);
                     pixelPanelGridBorder.BorderBrush = Brushes.Black;
                     pixelPanelGrid.Margin = new Thickness(0);
                     pixelPanelGrid.Children.Add(bd);
@@ -46,12 +46,11 @@ namespace Tema3_PixelArt
 
         private bool isPanelEmpty()
         {
-            bool isEmpty = true;
             foreach (var o in pixelPanelGrid.Children)
             {
-                if (((Border)o).Background != Brushes.White) isEmpty = false;
+                if (((Border)o).Background.ToString() != "#FFFFFFFF") return false;
             }
-            return isEmpty;
+            return true;
         }
         private void resizePanel(object sender, RoutedEventArgs e)
         {
@@ -157,6 +156,13 @@ namespace Tema3_PixelArt
             panelPersonalizadoTextBox.Foreground = Brushes.LightGray;
             if (String.IsNullOrEmpty(panelPersonalizadoTextBox.Text))
                 panelPersonalizadoTextBox.Text = "ej. 60";
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Button b = (Button)sender;
+            if (b.ToolTip.ToString() == "Borde") pixelPanelGridBorder.BorderThickness = new Thickness(3);
+            else pixelPanelGridBorder.BorderThickness = new Thickness(0);
         }
     }
 }

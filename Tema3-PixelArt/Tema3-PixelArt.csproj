@@ -103,5 +103,14 @@
   <ItemGroup>
     <Resource Include="assets\icon.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\rellenar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\sinborde.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\borde.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
